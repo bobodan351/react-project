@@ -1,9 +1,13 @@
-import React from 'react'
-
-const Row = () => {
+import React from "react";
+import Cell from "./Cell";
+const Row = ({ item }) => {
   return (
-	<main></main>
-  )
-}
+    <tr>
+      {Object.entries(item).map(([key, value]) => {
+        return <Cell key={key} cellData={JSON.stringify(value)} />;
+      })}
+    </tr>
+  );
+};
 
-export default Row
+export default Row;
