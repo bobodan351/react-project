@@ -1,24 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState, useEffect } from "react";
+import Form from "./Form";
+import List from "./List";
+import Table from "./Table";
 
 function App() {
+  const API_URL = "http://localhost:1234/";
+  const [reqType, setReqType] = useState("users");
+  const [items, setItems] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    const fetchItems = async () => {
+      try {
+        const response = await fetch(`${API_URL}${reqType}`);
+        const data = await response.json();
+        setItems(data);
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    (async () => fetchItems())();
+    setIsLoading(true);
+  }, [reqType]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <main>
+      <Form reqType={reqType} setReqType={setReqType} />
+      {/* <List items={items} isLoading={isLoading} setIsLoading={setIsLoading} /> */}
+      <Table items={items}/>
+    </main>
   );
 }
 
